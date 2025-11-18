@@ -1,0 +1,14 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "aialpha-sentiment-kandidat-23"
+resolve_s3 = true
+s3_prefix = "aialpha-sentiment-kandidat-23"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+parameter_overrides = "S3BucketName=\"kandidat-23-data\""
+image_repositories = []
+
+[default.global.parameters]
+region = "eu-west-1"
