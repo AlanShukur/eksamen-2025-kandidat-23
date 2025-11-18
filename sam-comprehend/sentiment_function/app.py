@@ -8,6 +8,8 @@ import hashlib
 comprehend = boto3.client('comprehend', region_name='eu-west-1')
 s3 = boto3.client('s3')
 
+
+# test test
 S3_BUCKET = os.environ.get('S3_BUCKET', 'pgr301-sentiment-data')
 
 def lambda_handler(event, context):
