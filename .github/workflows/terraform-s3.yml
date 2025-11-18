@@ -1,0 +1,60 @@
+name: Terraform S3 Infra
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra-s3/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infra-s3/**'
+      - '.github/workflows/**'
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: eu-west-1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init
+        working-directory: ./infra-s3
+        run: terraform init
+
+      - name: Terraform Format Check
+        working-directory: ./infra-s3
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        working-directory: ./infra-s3
+        run: terraform validate
+
+      - name: Terraform Plan (PR)
+        if: github.event_name == 'pull_request'
+        working-directory: ./infra-s3
+        run: terraform plan -no-color
+
+      - name: Terraform Apply (main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        working-directory: ./infra-s3
+        run: terraform apply -auto-approve
