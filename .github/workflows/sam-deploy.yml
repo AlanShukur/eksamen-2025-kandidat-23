@@ -54,6 +54,6 @@ jobs:
         working-directory: ./sam-comprehend
         run: |
           sam deploy \
-            --stack-name aialpha-sentiment-glennbech \
+            --stack-name $STACK_NAME \
             --no-confirm-changeset \
             --no-fail-on-empty-changeset
