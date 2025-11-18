@@ -58,15 +58,52 @@ Dette følger "cost-optimization"-prinsippet innen AWS Well-Architected Framewor
 
 ---
 
-## Oppgave 2 – *(Fylles ut etter du jobber med oppgave 2)*
+## Oppgave 2 (Del A og B) – 
 
 ### Leveranser
+- **API Gateway URL:** `https://fmgb0cwb3f.execute-api.eu-west-1.amazonaws.com/Prod/analyze/`
+- **S3 objekt med analysemal/svar:** `s3://kandidat-23-data/midlertidig/comprehend-20251118-222810-2718ec4f.json`
+- **Workflow-fil:** `.github/workflows/sam-deploy.yml`
+- **Workflow-kjøring (deploy til AWS):**
+  - `https://github.com/AlanShukur/eksamen-2025-kandidat-23/actions/runs/19483032186/job/55758894048`
+- **Workflow-kjøring (PR-validering uten deploy):**
+  - `https://github.com/AlanShukur/eksamen-2025-kandidat-23/pull/2`
 
-*
+### Drøfting – Oppgave 2
 
-### Drøfting
+**Hvorfor lagre resultatene i S3?**
 
-*
+Å lagre analyseresultater i S3 gjør løsningen mer robust og sporbar enn å kun returnere svaret direkte fra Lambda:
+- Man kan senere gjøre batch-analyser, reanalyse, eller koble på andre systemer (for eksempel dataplattform eller BI-verktøy).
+- S3 fungerer som et sentralt, billig og svært skalerbart lager for analyseresultater.
+- Ved å legge resultatene under `midlertidig/` utnytter vi lifecycle-regelen fra Oppgave 1 for automatisk opprydding og kostnadskontroll.
+
+**Hvorfor bruke SAM for Lambda-applikasjonen?**
+
+AWS SAM gir en enklere og mer deklarativ måte å beskrive serverless-applikasjoner på:
+- `template.yaml` beskriver Lambda, API Gateway, IAM-roller og parameterverdier.
+- `sam build` pakker koden riktig (inkludert avhengigheter) og gjør deploy forutsigbar.
+- `sam local invoke` og `sam local start-api` gjør det mulig å teste funksjonen lokalt før deploy.
+Dette gir bedre utvikleropplevelse og passer godt inn i DevOps-prinsipper om hyppig feedback og automatisering.
+
+**Hvorfor skal vi *ikke* deploye på hver pull request?**
+
+Å deploye til produksjonsmiljø (eller delt AWS-miljø) på hver PR er dårlig praksis fordi:
+- PR-er er ofte uferdige eller under review – koden er ikke godkjent enda.
+- Det kan skape «støy» og ustabilitet i miljøet hvis mange PR-er deployer parallelt.
+- Kostnader og ressursbruk i AWS øker unødvendig.
+
+En bedre praksis, som vi implementerer her, er:
+- På PR: kun kjøre **validering og bygg** (`sam validate`, `sam build`). Dette sikrer at endringer er syntaktisk riktige og byggbare.
+- På push til `main`: kjøre full **deploy**. Da vet vi at koden er reviewet og godkjent.
+
+**DevOps-perspektiv på workflowen**
+
+Workflowen for Oppgave 2 følger DevOps-prinsipper på flere måter:
+- **Automatisering:** Hele bygg- og deployprosessen er automatisert via GitHub Actions.
+- **Kontinuerlig integrasjon:** Hver PR blir automatisk validert og bygget, noe som gir rask feedback til utviklere.
+- **Kontinuerlig leveranse:** Endringer på `main` deployes automatisk til AWS, uten manuelle steg.
+- **Konfigurasjon via kode:** Både `template.yaml` (SAM) og workflow-fila er kode, som kan versjonskontrolleres, reviewes og rulles tilbake ved behov.
 
 ---
 
