@@ -6,24 +6,30 @@ on:
       - main
     paths:
       - 'sam-comprehend/**'
+      - '.github/workflows/sam-deploy.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'sam-comprehend/**'
+      - '.github/workflows/sam-deploy.yml'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION: eu-west-1
+      STACK_NAME: aialpha-sentiment-kandidat-23
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
       - name: Set up SAM CLI
         uses: aws-actions/setup-sam@v2
@@ -35,7 +41,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
 
+      - name: SAM validate
+        working-directory: ./sam-comprehend
+        run: sam validate
+
+      - name: SAM build
+        working-directory: ./sam-comprehend
+        run: sam build
+
       - name: Deploy SAM application
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         working-directory: ./sam-comprehend
         run: |
           sam deploy \
