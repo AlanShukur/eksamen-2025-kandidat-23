@@ -107,7 +107,7 @@ Workflowen for Oppgave 2 følger DevOps-prinsipper på flere måter:
 
 ---
 
-## Oppgave 3 – Docker og GitHub Actions
+## Oppgave 3 – Docker og GitHub Actions (Del A og B)
 
 ### Leveranser
 
