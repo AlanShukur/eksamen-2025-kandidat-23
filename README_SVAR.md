@@ -107,15 +107,38 @@ Workflowen for Oppgave 2 følger DevOps-prinsipper på flere måter:
 
 ---
 
-## Oppgave 3 – *(Fylles ut senere)*
+## Oppgave 3 – Docker og GitHub Actions
 
 ### Leveranser
 
-*
+- **Dockerfile:** `sentiment-docker/Dockerfile`
+- **Docker Hub image:**  
+  `https://hub.docker.com/r/AlanShukur/sentiment-docker`
+- **Workflow-fil:**  
+  `.github/workflows/docker-dockerhub.yml`
+- **Workflow-kjøring (push til Docker Hub):**  
+  https://github.com/AlanShukur/eksamen-2025-kandidat-23/actions/runs/19509821560/job/55846308502
 
-### Drøfting
+### Drøfting – Oppgave 3
 
-*
+**Hvorfor Docker?**  
+Containerisering gjør applikasjonen portabel og konsistent: samme kjørbare miljø lokalt, i test og i produksjon. Ingen “works on my machine”-problemer, og applikasjonen kan kjøres på hvilken som helst host som støtter Docker.
+
+**Hvorfor multi-stage builds?**  
+Multi-stage build reduserer image-størrelse ved å skille bygg-steg og runtime-steg. Dette gir:  
+- raskere deploy  
+- lavere kostnader  
+- mindre angrepsflate
+
+**Hvorfor pushe til Docker Hub?**  
+Docker Hub fungerer som et globalt registry der images kan hentes av GitHub Actions, utviklere, og Kubernetes/EC2/ECS.  
+Workflowen automatiserer bygg–og–publiser prosessen slik at ny versjon alltid legges ut ved push til `main`.
+
+**DevOps-prinsipp:**  
+Oppgaven viser “CI/CD for containers”:  
+- CI → bygge container på hver commit  
+- CD → publisere artefakt til container registry  
+Dette gir sporbarhet, versjonering og automatisert leveranse.
 
 ---
 
