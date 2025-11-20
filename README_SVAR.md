@@ -142,15 +142,89 @@ Dette gir sporbarhet, versjonering og automatisert leveranse.
 
 ---
 
-## Oppgave 4 – *(Fylles ut senere)*
+## Oppgave 4 – Observabilitet og Custom Metrics (Del A)
 
-### Leveranser
+### Leveranser (Del A)
+- **Micrometer-metrikker implementert i Java:**
+  - Counter (`sentiment.analysis.total`)
+  - Timer (`bedrock.api.latency`)
+  - Gauge (`sentiment.detected_companies.gauge`)
+  - Distribution Summary (`bedrock.confidence.distribution`)
+- **Namespace brukt i CloudWatch:** `kandidat-23-sentimentapp`
+- **Skjermbilder av metrikker i CloudWatch:**
+  - Company Model
+  - Company Sentiment
+  - Namespace-oversikt (alle faner)
+  - Phi Sentiment
+  - Gauge-metrikk
 
-*
+---
 
-### Drøfting
+### Skjermbilder – CloudWatch Metrics
 
-*
+#### **Company Model Metric**
+![Company Model Metric](screenshots/company-model.png)
+
+#### **Company Sentiment Metric**
+![Company Sentiment Metric](screenshots/company-sentiment.png)
+
+#### **Namespace Tabs (Alle metrikker under namespace)**
+![Namespace Tabs](screenshots/namespace-tabs.png)
+
+#### **Phi Sentiment Metric**
+![Phi Sentiment Metric](screenshots/phi-sentiment.png)
+
+#### **Gauge Metric – Companies Detected**
+![Gauge Metric](screenshots/gauge.png)
+
+---
+
+### Drøfting – Oppgave 4 Del A
+
+I denne oppgaven implementerte jeg fire typer Micrometer-metrikker i Spring Boot-applikasjonen for å gi bedre innsikt i hvordan sentimentanalysen fungerer når den kjører i praksis. Disse metrikksignalene eksporteres automatisk til Amazon CloudWatch gjennom Micrometer CloudWatch Registry, konfigurert med namespace `kandidat-23-sentimentapp`.
+
+#### **1. Counter (sentiment.analysis.total)**
+Counter brukes til å telle antall analyser som blir gjennomført. Den øker for hver forespørsel og gir en enkel, men svært nyttig KPI for trafikkvolum over tid. Siden den aldri minker, er den ideell for å vise antall hendelser.
+
+#### **2. Timer (bedrock.api.latency)**
+Timer måler hvor lang tid AWS Bedrock bruker på å svare. Dette er kritisk for observabilitet fordi:
+- Du kan se gjennomsnittlig responstid
+- Du får persentiler (p50, p90, p99)
+- Du ser om spesifikke selskaper eller modeller skaper latensproblemer
+
+Dette er en av de mest relevante metrikken for en API-drevet løsning.
+
+#### **3. Gauge (sentiment.detected_companies.gauge)**
+Gauge representerer en verdi som kan både øke og minke. Jeg brukte den til å måle *hvor mange selskaper som ble funnet i siste analyse*. Den gir sanntidsinnsikt i hvordan kompleks input påvirker applikasjonen.
+
+Gauge er spesielt nyttig når verdier varierer mye mellom forespørsler.
+
+#### **4. Distribution Summary (bedrock.confidence.distribution)**
+Denne metrikktypen viser spredningen av confidence-scores for hvert sentiment. Dette gir verdifull innsikt:
+- Er analysene typisk sikre (0.9–1.0)?
+- Varierer de mye?
+- Får enkelte selskaper lavere gjennomsnittlig score?
+
+Dette er nyttig både for modellforståelse og kvalitetsovervåkning.
+
+---
+
+### Hvorfor disse metrikktype-valgene?
+
+| Instrument | Hvorfor valgt? | Typisk bruk |
+|-----------|----------------|-------------|
+| **Counter** | Måle volum over tid | Trafikk, antall kall |
+| **Timer** | Måle ytelse og latens | API-responstid |
+| **Gauge** | Sanntidverdi som går opp og ned | Tilstander, bufferstørrelser |
+| **Distribution Summary** | Fordelingsanalyse | Score, payload-størrelser |
+
+Dette dekker fire ulike aspekter av observabilitet:
+- **Bruksmønster**
+- **Ytelse**
+- **Systemtilstand**
+- **Kvalitet på analyse**
+
+Dermed gir det et helhetlig bilde av oppførselen til applikasjonen.
 
 ---
 
