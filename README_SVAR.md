@@ -31,7 +31,7 @@
 
 * **Pipeline-run:**
 
-  * `https://github.com/AlanShukur/eksamen-2025-kandidat-23/actions/runs/19478591725`
+  * https://github.com/AlanShukur/eksamen-2025-kandidat-23/actions/runs/19478591725
 
 ### **Drøfting – Oppgave 1**
 
@@ -65,9 +65,9 @@ Dette følger "cost-optimization"-prinsippet innen AWS Well-Architected Framewor
 - **S3 objekt med analysemal/svar:** `s3://kandidat-23-data/midlertidig/comprehend-20251118-222810-2718ec4f.json`
 - **Workflow-fil:** `.github/workflows/sam-deploy.yml`
 - **Workflow-kjøring (deploy til AWS):**
-  - `https://github.com/AlanShukur/eksamen-2025-kandidat-23/actions/runs/19483032186/job/55758894048`
+  - https://github.com/AlanShukur/eksamen-2025-kandidat-23/actions/runs/19483032186/job/55758894048
 - **Workflow-kjøring (PR-validering uten deploy):**
-  - `https://github.com/AlanShukur/eksamen-2025-kandidat-23/actions/runs/19483029694/job/55758885603`
+  - https://github.com/AlanShukur/eksamen-2025-kandidat-23/actions/runs/19483029694/job/55758885603
 
 ### Drøfting – Oppgave 2
 
@@ -113,7 +113,7 @@ Workflowen for Oppgave 2 følger DevOps-prinsipper på flere måter:
 
 - **Dockerfile:** `sentiment-docker/Dockerfile`
 - **Docker Hub image:**  
-  `https://hub.docker.com/r/AlanShukur/sentiment-docker`
+  https://hub.docker.com/r/AlanShukur/sentiment-docker
 - **Workflow-fil:**  
   `.github/workflows/docker-dockerhub.yml`
 - **Workflow-kjøring (push til Docker Hub):**  
