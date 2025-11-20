@@ -23,7 +23,7 @@ resource "aws_sns_topic" "alarm_topic" {
 resource "aws_sns_topic_subscription" "email_sub" {
   topic_arn = aws_sns_topic.alarm_topic.arn
   protocol  = "email"
-  endpoint  = var.alarm_email   # <-- Du setter dette i variables.tf
+  endpoint  = var.alarm_email   
 }
 
 # ================================
@@ -35,50 +35,64 @@ resource "aws_cloudwatch_dashboard" "sentiment_dashboard" {
   dashboard_body = jsonencode({
     widgets = [
       {
-        type = "metric",
-        x    = 0,
-        y    = 0,
-        width  = 12,
-        height = 6,
-
-        properties = {
-          metrics = [
-            ["kandidat-23-sentimentapp", "bedrock.api.latency", { "stat": "Average", "period": 60 }]
-          ]
-          title = "Bedrock API Latency (ms)"
+        "type"  = "metric",
+        "x"     = 0,
+        "y"     = 0,
+        "width" = 12,
+        "height" = 6,
+        "properties" = {
+          "region"  = "eu-west-1",
+          "title"   = "Bedrock API Latency (ms)",
+          "metrics" = [
+            [
+              "kandidat-23-sentimentapp",
+              "bedrock.api.latency"
+            ]
+          ],
+          "stat"   = "Average",
+          "period" = 60,
+          "view"   = "timeSeries"
         }
       },
-
       {
-        type = "metric",
-        x    = 0,
-        y    = 7,
-        width  = 12,
-        height = 6,
-
-        properties = {
-          metrics = [
-            ["kandidat-23-sentimentapp", "sentiment.detected_companies.gauge"]
-          ]
-          title = "Detected Companies (Gauge)"
+        "type"  = "metric",
+        "x"     = 0,
+        "y"     = 7,
+        "width" = 12,
+        "height" = 6,
+        "properties" = {
+          "region"  = "eu-west-1",
+          "title"   = "Detected Companies (Gauge)",
+          "metrics" = [
+            [
+              "kandidat-23-sentimentapp",
+              "sentiment.detected_companies.gauge"
+            ]
+          ],
+          "stat"   = "Average",
+          "period" = 60,
+          "view"   = "singleValue"
         }
       }
     ]
   })
 }
 
+
 # ================================
 # CLOUDWATCH ALARM
 # ================================
 resource "aws_cloudwatch_metric_alarm" "latency_alarm" {
-  alarm_name                = "kandidat23-bedrock-latency-high"
-  comparison_operator       = "GreaterThanThreshold"
-  evaluation_periods        = 1
-  metric_name               = "bedrock.api.latency"
-  namespace                 = "kandidat-23-sentimentapp"
-  period                    = 60
-  statistic                 = "Average"
-  threshold                 = 5000    # 5 sekunder
-  alarm_description         = "API latency is above 5 seconds"
-  alarm_actions             = [aws_sns_topic.alarm_topic.arn]
+  alarm_name          = "kandidat23-bedrock-latency-high"
+  metric_name         = "bedrock.api.latency"
+  namespace           = "kandidat-23-sentimentapp"
+  statistic           = "Average"
+  period              = 60
+  threshold           = 5000
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  alarm_actions       = [aws_sns_topic.alarm_topic.arn]
+
+  # VIKTIG: manglende datapunkt = alarm (no latency / ingen trafikk)
+  treat_missing_data  = "breaching"
 }

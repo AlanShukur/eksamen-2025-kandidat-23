@@ -228,3 +228,99 @@ Dermed gir det et helhetlig bilde av oppførselen til applikasjonen.
 
 ---
 
+---
+
+## Oppgave 4 (Del B) – Observabilitet med Terraform (Dashboard + Alarm + SNS)
+
+### **Leveranser**
+
+#### **Terraform-kode (infra-cloudwatch/)**
+Følgende filer ligger i `infra-cloudwatch/`:
+
+- `main.tf`
+- `variables.tf`
+- `outputs.tf`
+- `versions.tf`
+
+Terraform-modulen oppretter:
+- CloudWatch Dashboard  
+- CloudWatch Alarm  
+- SNS Topic  
+- SNS E-postabonnement  
+
+---
+
+### **CloudWatch Dashboard**
+
+Dashboard-navn:  
+**`kandidat-23-sentiment-dashboard`**
+
+Dashboardet viser:
+- **bedrock.api.latency** (Timer-metrikk)
+- **sentiment.detected_companies.gauge** (Gauge-metrikk)
+
+Skjermbilde:
+![Dashboard](screenshots/cloudwatch-dashboard.png)
+
+---
+
+### **CloudWatch Alarm**
+
+Alarm opprettet via Terraform:
+
+- **Navn:** `kandidat23-bedrock-latency-high`
+- **Metric:** `bedrock.api.latency`
+- **Namespace:** `kandidat-23-sentimentapp`
+- **Alarmtype:** *Missing data / No latency alarm*
+- **Status:** Verifisert i ALARM state
+
+Skjermbilder:
+![Alarm Overview & Triggered](screenshots/alarm-overview.png)
+
+---
+
+### **SNS Varsling**
+
+Terraform opprettet:
+- `aws_sns_topic.alarm_topic`
+- `aws_sns_topic_subscription.email_sub`
+
+E-post ble mottatt og bekreftet.
+
+Skjermbilde:
+![SNS Email](screenshots/sns-alarm.png)
+
+---
+
+### **Alarm Trigger Test**
+
+Alarmen ble trigget ved å stoppe innsending av latensdata (ingen datapunkter → ALARM).
+
+---
+
+## **Drøfting – Oppgave 4 Del B**
+
+**Hvorfor CloudWatch Dashboard?**  
+Dashboardet samler kritiske applikasjonsmetrikker på ett sted og gir rask oversikt over systemets tilstand. Det gjør det enklere å se trender, oppdage avvik og ta beslutninger basert på faktiske målinger, noe som er sentralt i DevOps-prinsippet “kontinuerlig feedback”.
+
+**Hvorfor en alarm på manglende latensdata?**  
+Manglende metrikker er ofte like kritisk som dårlig ytelse. Når applikasjonen slutter å sende data, kan det bety:
+- container krasj
+- nettverksproblemer
+- feil i credentials
+- feil i Micrometer-integrasjonen
+
+Alarmen gir tidlig varsling slik at feilen kan oppdages før brukere merker det.
+
+**Hvorfor SNS for varsling?**  
+SNS er en enkel, pålitelig og standardisert tjeneste for alerting i AWS. E-post er nok i dette prosjektet, men samme infrastruktur kan senere kobles til Slack, PagerDuty eller SMS uten endringer i Terraform-koden.
+
+**DevOps-perspektiv**  
+Oppgave 4 Del B demonstrerer flere DevOps-prinsipper:
+- **Automatisering:** Dashboard og alarmer bygges gjennom IaC, ikke manuelt.
+- **Observabilitet:** Metrikker, logging og alarmer gir full innsikt i systemets tilstand.
+- **Feedback loops:** Når alarm utløses og e-post sendes, får teamet umiddelbar tilbakemelding.
+- **Pålitelighet:** Overvåkningsinfrastruktur gjør systemet mer robust og mindre sårbart.
+
+---
+
