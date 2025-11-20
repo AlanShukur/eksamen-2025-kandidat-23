@@ -324,3 +324,56 @@ Oppgave 4 Del B demonstrerer flere DevOps-prinsipper:
 
 ---
 
+## Oppgave 5 – KI-assistert Systemutvikling og DevOps-prinsipper
+
+### **Innledning**
+
+Bruken av KI-assistenter som GitHub Copilot, ChatGPT og Claude har endret måten utviklere skriver kode på. Disse verktøyene kan generere funksjoner, lage dokumentasjon, skrive tester og foreslå forbedringer. Dette gir et potensial for økt hastighet og produktivitet i utviklingsprosesser. Samtidig introduserer KI nye typer risiko knyttet til kvalitet, sikkerhet og vedlikehold. I denne drøftingen analyserer jeg hvordan KI-assistert utvikling påvirker de tre sentrale DevOps-prinsippene: **flyt**, **feedback** og **kontinuerlig læring og forbedring**.
+
+---
+
+## **Flyt (Flow)**
+
+KI-verktøy kan i stor grad forbedre flyten i utviklingsprosessen. For det første kan KI generere boilerplate-kode, forslag til funksjoner og dokumentasjon langt raskere enn en utvikler kan gjøre manuelt. Dette reduserer tiden fra idé til første fungerende prototype. I eksamen har det for eksempel vært naturlig å bruke KI til å fikse feil i Terraform-konfigurasjoner, forstå API-feilmeldinger eller generere testdata. Dette eliminerer flaskehalser som vanligvis oppstår når utviklere bruker tid på å søke etter feil eller skrive repetitive deler av koden.
+
+Samtidig finnes det risiko. KI kan introdusere nye flaskehalser hvis utviklere blir for avhengige av forslag som ikke passer systemets arkitektur eller krav. KI kan foreslå løsninger som ser riktige ut, men som skjuler ineffektivitet, sikkerhetshull eller ikke følger etablerte praksiser. Dette betyr at code review kan bli mer krevende, fordi teamet må bruke tid på å verifisere at forslagene ikke bare fungerer, men også er riktige, sikre og vedlikeholdbare.
+
+I DevOps-sammenheng kan også deployment-syklusen påvirkes. KI-generert kode som passerer gjennom pipelines uten tilstrekkelig verifikasjon kan føre til hyppigere feil i produksjon. Flow forbedres altså kun hvis det etableres gode mekanismer for kvalitetssikring. KI kan fjerne manuelle flaskehalser, men kan samtidig introdusere nye i form av økt behov for kontroll.
+
+---
+
+## **Feedback**
+
+Feedback er en kjerne i DevOps og KI endrer hvordan feedback-looper fungerer. På den positive siden kan KI generere tester, hjelpe med å lese logg-utskrifter og foreslå forbedringer basert på systematisk mønstergjenkjenning i kodebasen. Når automatiske pipelines kjører tester, finner feil og rapporterer tilbake til utvikleren, kan KI brukes til å forklare hvorfor noe feiler og foreslå konkrete rettelser.
+
+I systemer hvor KI genererer kode, blir observabilitet og monitorering enda viktigere. Feil kan oppstå på grunn av misforståtte instruksjoner, unøyaktigheter i modellens kunnskap eller kode som virker, men som ikke gjør riktig ting. Derfor må team sikre at automatiserte tester, statiske analyser og CloudWatch-metrikker gir tydelig og kontinuerlig feedback.
+
+Et eksempel fra eksamen er integrasjonen mot AWS Bedrock. Hvis KI hadde skrevet store deler av controller- eller metrics-koden, ville det vært nødvendig å bruke CloudWatch-metrikker, API-feilmeldinger og lokal testing til å verifisere at alt virker riktig. KI kan ikke selv forstå driftssituasjonen det må DevOps-praksisen kompensere for gjennom gode overvåkingsmekanismer.
+
+Et potensielt problem er at utviklere kan stole for mye på KI-forslag og dermed overse viktige signaler i feedback-systemet. Hvis KI brukes uten kritisk vurdering, kan feil som burde vært oppdaget tidlig slippe gjennom. Derfor må KI-assistert utvikling kombineres med robuste pipelines, tydelige alarmgrenser og regelmessig gjennomgang av produksjonsdata.
+
+---
+
+## **Kontinuerlig læring og forbedring**
+
+KI påvirker læring på to måter. På den positive siden fungerer KI som en mentor. Den kan forklare konsepter, foreslå korrekt kode og hjelpe utviklere med å lære nye teknologier raskere. I denne eksamenen kunne KI hjelpe med å forstå hvordan man setter opp Terraform-moduler, SAM-deploy eller hvordan man konfigurerer CloudWatch-metrikker.
+
+Men den største risikoen er at utviklere kan miste dybdeforståelse hvis de lar KI gjøre for mye arbeid. DevOps krever at utviklere forstår hele pipeline-løpet fra infrastruktur til drift. Hvis KI genererer kode som utviklere ikke forstår, svekkes evnen til feilsøking og problemløsning. Over tid kan dette føre til redusert kompetanse i teamet.
+
+Konsekvensen er at organisasjoner må etablere prinsipper for *ansvarlig KI-bruk*. Dette innebærer blant annet:
+- kontinuerlig code review av mennesker  
+- krav om dokumentasjon av KI-genererte endringer  
+- retrospektiver som analyserer hvor KI ble brukt  
+- fokus på å lære hvorfor løsninger fungerer, ikke bare akseptere dem  
+
+I tillegg må utviklere lære nye ferdigheter: prompt engineering, verifikasjon av KI-generert kode og kritisk evaluering av forslag. KI erstatter ikke faglig forståelse det forsterker behovet for den.
+
+---
+
+## **Konklusjon**
+
+KI-assistert utvikling kan forbedre DevOps-praksis betydelig når det gjelder flow, feedback og kontinuerlig læring, men fordelene kommer med tydelige utfordringer. KI gir økt produktivitet, raskere feilsøking og bedre utvikleropplevelse. Samtidig introduserer den risiko for feil, svakere kodekvalitet og redusert dybdekunnskap.
+
+Effektiv bruk av KI krever derfor en balanse: KI bør være et verktøy som akselererer arbeidet, men ikke erstatte utviklerens evne til å forstå, verifisere og forbedre systemer. For team som klarer denne balansen, kan KI styrke alle tre DevOps-prinsippene og bidra til tryggere, raskere og mer læringsorientert utvikling.
+
+
