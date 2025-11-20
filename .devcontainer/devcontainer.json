@@ -11,7 +11,8 @@
     "ghcr.io/devcontainers/features/java:1": {
       "version": "21",
       "installMaven": "true"
-    }
+    },
+    "ghcr.io/devcontainers/features/terraform:1": {}
   },
   "remoteUser": "vscode",
   "postCreateCommand": "python3 -m pip install --upgrade pip pipx && pipx install aws-sam-cli && echo 'export PATH=$PATH:/home/vscode/.local/bin' >> /home/vscode/.bashrc && echo 'export PATH=$PATH:/home/vscode/.local/bin' >> /home/vscode/.zshrc && aws --version && sam --version && java -version && mvn -v && docker --version",
