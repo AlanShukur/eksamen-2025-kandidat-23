@@ -105,6 +105,27 @@ Workflowen for Oppgave 2 følger DevOps-prinsipper på flere måter:
 - **Kontinuerlig leveranse:** Endringer på `main` deployes automatisk til AWS, uten manuelle steg.
 - **Konfigurasjon via kode:** Både `template.yaml` (SAM) og workflow-fila er kode, som kan versjonskontrolleres, reviewes og rulles tilbake ved behov.
 
+## Instruksjoner til sensor
+
+### For å kjøre workflowen i egen GitHub-konto må sensor:
+
+1. **Forke repoet eller kopiere det til egen GitHub-bruker.**  
+
+2. **Opprette GitHub Secrets under Settings → Secrets → Actions:**  
+   I sensor sitt repo må disse settes i GitHub → Settings → Secrets → Actions:
+   ```
+   AWS_ACCESS_KEY_ID
+   AWS_SECRET_ACCESS_KEY
+   ```
+  
+3. **Bruke en IAM-bruker med tilgang til CloudFormation, Lambda, API Gateway og S3.**  
+
+4. **Sørge for at region er eu-west-1.**  
+
+5. **Lage en Pull Request med endring i sam-comprehend/ for å teste validering uten deploy.**  
+
+6. **Merge PR-en eller push til main for å teste full deploy-pipeline.**  
+
 ---
 
 ## Oppgave 3 – Docker og GitHub Actions (Del A og B)
@@ -139,6 +160,50 @@ Oppgaven viser “CI/CD for containers”:
 - CI → bygge container på hver commit  
 - CD → publisere artefakt til container registry  
 Dette gir sporbarhet, versjonering og automatisert leveranse.
+
+## ✅ Oppgave 3 – Docker + Docker Hub CI/CD
+
+### Hvordan sensor kan verifisere løsningen
+
+1. **Fork prosjektet**
+
+2. **Legg inn Docker Hub secrets i fork-en**
+   I sensor sitt repo må disse settes i GitHub → Settings → Secrets → Actions:
+   ```
+   DOCKERHUB_USERNAME
+   DOCKERHUB_TOKEN
+   ```
+
+3. **Trigger workflow**
+   Sensor gjør en commit til `main` eller merger PR.
+
+4. **Workflow vil:**
+   - bygge Docker-image basert på `sentiment-docker/Dockerfile`
+   - tagge imaget `<username>/sentiment-docker:latest`
+   - pushe til Docker Hub
+
+5. **Verifiser at image er publisert**
+   Sensor kan sjekke:
+   ```
+   https://hub.docker.com/r/<DOCKERHUB_USERNAME>/sentiment-docker
+   ```
+
+6. **Teste containeren**
+   Sensor kan kjøre containeren lokalt:
+
+   ```bash
+   docker run -p 8080:8080 <username>/sentiment-docker:latest
+   ```
+
+   Test API-et:
+
+   ```bash
+   curl -X POST http://localhost:8080/api/analyze \
+     -H "Content-Type: application/json" \
+     -d '{"requestId": "test", "text": "NVIDIA is strong"}'
+   ```
+
+   Responsen viser at Bedrock-integrasjon og logikk fungerer.
 
 ---
 
