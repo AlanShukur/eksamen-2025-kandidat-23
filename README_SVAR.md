@@ -161,7 +161,7 @@ Oppgaven viser “CI/CD for containers”:
 - CD → publisere artefakt til container registry  
 Dette gir sporbarhet, versjonering og automatisert leveranse.
 
-## ✅ Oppgave 3 – Docker + Docker Hub CI/CD
+## Oppgave 3 – Docker + Docker Hub CI/CD
 
 ### Hvordan sensor kan verifisere løsningen
 
